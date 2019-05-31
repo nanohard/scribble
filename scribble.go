@@ -2,7 +2,7 @@ package scribble
 
 import (
 	// "encoding/json"
-	"github.com/kelindar/binary"
+	// "github.com/kelindar/binary"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -10,10 +10,12 @@ import (
 	"sync"
 
 	"github.com/jcelliott/lumber"
+	"github.com/kelindar/binary"
+	"github.com/nanohard/scribble/codec/json"
 )
 
-// Version is the current version of the project
-const Version = "1.0.4"
+// Defaults to json
+var defaultCodec = json.Codec
 
 type (
 
@@ -30,6 +32,7 @@ type (
 	// Driver is what is used to interact with the scribble database. It runs
 	// transactions, and provides log output
 	Driver struct {
+		// codec
 		mutex   sync.Mutex
 		mutexes map[string]*sync.Mutex
 		dir     string // the directory where scribble will create the database
