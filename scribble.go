@@ -1,8 +1,6 @@
 package scribble
 
 import (
-	// "encoding/json"
-	// "github.com/kelindar/binary"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -10,12 +8,12 @@ import (
 	"sync"
 
 	"github.com/jcelliott/lumber"
-	"github.com/kelindar/binary"
-	"github.com/nanohard/scribble/codec/json"
+	"github.com/nanohard/scribble/codec"
+	"github.com/nanohard/scribble/codec/binary"
 )
 
-// Defaults to json
-var defaultCodec = json.Codec
+// Defaults to binary
+var defaultCodec = binary.Codec
 
 type (
 
@@ -32,7 +30,7 @@ type (
 	// Driver is what is used to interact with the scribble database. It runs
 	// transactions, and provides log output
 	Driver struct {
-		// codec
+		codec   codec.MarshalUnmarshaler
 		mutex   sync.Mutex
 		mutexes map[string]*sync.Mutex
 		dir     string // the directory where scribble will create the database
@@ -42,6 +40,7 @@ type (
 
 // Options uses for specification of working golang-scribble
 type Options struct {
+	Codec  codec.MarshalUnmarshaler
 	Logger // the logger scribble will use (configurable)
 }
 
@@ -60,6 +59,10 @@ func New(dir string, options *Options) (*Driver, error) {
 		opts = *options
 	}
 
+	if opts.Codec == nil {
+		opts.Codec = defaultCodec
+	}
+
 	// if no logger is provided, create a default
 	if opts.Logger == nil {
 		opts.Logger = lumber.NewConsoleLogger(lumber.INFO)
@@ -69,6 +72,7 @@ func New(dir string, options *Options) (*Driver, error) {
 	driver := Driver{
 		dir:     dir,
 		mutexes: make(map[string]*sync.Mutex),
+		codec:   opts.Codec,
 		log:     opts.Logger,
 	}
 
@@ -89,12 +93,12 @@ func (d *Driver) Write(collection, resource string, v interface{}) error {
 
 	// ensure there is a place to save record
 	if collection == "" {
-		return fmt.Errorf("Missing collection - no place to save record!")
+		return fmt.Errorf("missing collection - no place to save record")
 	}
 
 	// ensure there is a resource (name) to save record as
 	if resource == "" {
-		return fmt.Errorf("Missing resource - unable to save record (no name)!")
+		return fmt.Errorf("missing resource - unable to save record (no name)")
 	}
 
 	mutex := d.getOrCreateMutex(collection)
@@ -112,7 +116,8 @@ func (d *Driver) Write(collection, resource string, v interface{}) error {
 	}
 
 	//
-	b, err := binary.Marshal(v)
+	b, err := d.codec.Marshal(v)
+	// b, err := binary.Marshal(v)
 	if err != nil {
 		return err
 	}
@@ -131,12 +136,12 @@ func (d *Driver) Read(collection, resource string, v interface{}) error {
 
 	// ensure there is a place to save record
 	if collection == "" {
-		return fmt.Errorf("Missing collection - no place to save record!")
+		return fmt.Errorf("missing collection - no place to save record")
 	}
 
 	// ensure there is a resource (name) to save record as
 	if resource == "" {
-		return fmt.Errorf("Missing resource - unable to save record (no name)!")
+		return fmt.Errorf("missing resource - unable to save record (no name)")
 	}
 
 	//
@@ -154,7 +159,7 @@ func (d *Driver) Read(collection, resource string, v interface{}) error {
 	}
 
 	// unmarshal data
-	return binary.Unmarshal(b, &v)
+	return d.codec.Unmarshal(b, &v)
 }
 
 // ReadAll records from a collection; this is returned as a slice of strings because
@@ -163,7 +168,7 @@ func (d *Driver) ReadAll(collection string) ([]string, error) {
 
 	// ensure there is a collection to read
 	if collection == "" {
-		return nil, fmt.Errorf("Missing collection - unable to record location!")
+		return nil, fmt.Errorf("missing collection - unable to record location")
 	}
 
 	//
@@ -213,7 +218,7 @@ func (d *Driver) Delete(collection, resource string) error {
 
 	// if fi is nil or error is not nil return
 	case fi == nil, err != nil:
-		return fmt.Errorf("Unable to find file or directory named %v\n", path)
+		return fmt.Errorf("unable to find file or directory named %v", path)
 
 	// remove directory and all contents
 	case fi.Mode().IsDir():
