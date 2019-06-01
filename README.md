@@ -19,12 +19,12 @@ size.
 #### Initialize Database
 ```go
 import(
-"github.com/nanohard/scribble"
+    "github.com/nanohard/scribble"
 
-// Needed for Unmarshaling when using db.ReadAll()
-"github.com/nanohard/scribble/codec/json"
-// Or
-"github.com/nanohard/scribble/codec/binary"
+    // Needed for Unmarshaling when using db.ReadAll()
+    "github.com/nanohard/scribble/codec/json"
+    // Or
+    "github.com/nanohard/scribble/codec/binary"
 )
 
 // A new scribble driver, providing the directory where it will be writing to,
@@ -32,7 +32,7 @@ import(
 // Defaults to using encoding/binary (well, really kelindar/binary)
 db, err := scribble.New(dir, nil) // `binary.Codec` is used by default
 if err != nil {
-  fmt.Println("Error", err)
+    fmt.Println("Error", err)
 }
 
 // Or
@@ -42,7 +42,7 @@ options := scribble.Options{
 }
 db, err := scribble.New(dir, options)
 if err != nil {
-  fmt.Println("Error", err)
+    fmt.Println("Error", err)
 }
 ```
 
@@ -51,38 +51,38 @@ if err != nil {
 // Write a fish to the database
 fish := Fish{}
 if err := db.Write("fish", "onefish", fish); err != nil {
-  fmt.Println("Error", err)
+    fmt.Println("Error", err)
 }
 
 // Read a fish from the database (passing fish by reference)
 onefish := Fish{}
 if err := db.Read("fish", "onefish", &onefish); err != nil {
-  fmt.Println("Error", err)
+    fmt.Println("Error", err)
 }
 
 // Read all fish from the database, unmarshaling the response.
 records, err := db.ReadAll("fish")
 if err != nil {
-  fmt.Println("Error", err)
+    fmt.Println("Error", err)
 }
 
 fishies := []Fish{}
 for _, f := range records {
-  fishFound := Fish{}
-  if err := json.Unmarshal([]byte(f), &fishFound); err != nil {
-    fmt.Println("Error", err)
-  }
-  fishies = append(fishies, fishFound)
+    fishFound := Fish{}
+    if err := json.Unmarshal([]byte(f), &fishFound); err != nil {
+        fmt.Println("Error", err)
+    }
+    fishies = append(fishies, fishFound)
 }
 
 // Delete a fish from the database
 if err := db.Delete("fish", "onefish"); err != nil {
-  fmt.Println("Error", err)
+    fmt.Println("Error", err)
 }
 
 // Delete all fish from the database
 if err := db.Delete("fish", ""); err != nil {
-  fmt.Println("Error", err)
+    fmt.Println("Error", err)
 }
 ```
 
