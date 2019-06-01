@@ -205,6 +205,7 @@ func (d *Driver) ReadAll(collection string) ([]string, error) {
 // Delete locks that database and then attempts to remove the collection/resource
 // specified by [path]
 func (d *Driver) Delete(collection, resource string) error {
+
 	path := filepath.Join(collection, resource)
 	//
 	mutex := d.getOrCreateMutex(collection)
