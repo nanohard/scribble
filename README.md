@@ -69,7 +69,8 @@ if err != nil {
 fishies := []Fish{}
 for _, f := range records {
     fishFound := Fish{}
-    if err := json.Unmarshal([]byte(f), &fishFound); err != nil {
+    // binary.Codec.Unmarshal or json.Codec.Unmarshal
+    if err := json.Codec.Unmarshal([]byte(f), &fishFound); err != nil {
         fmt.Println("Error", err)
     }
     fishies = append(fishies, fishFound)
