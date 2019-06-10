@@ -2,10 +2,8 @@ github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/jcelliott/lumber v0.0.0-20160324203708-dd349441af25 h1:EFT6MH3igZK/dIVqgGbTqWVvkZ7wJ5iGN03SVtvvdd8=
 github.com/jcelliott/lumber v0.0.0-20160324203708-dd349441af25/go.mod h1:sWkGw/wsaHtRsT9zGQ/WyJCotGWG/Anow/9hsAcBWRw=
-github.com/kelindar/binary v1.0.4 h1:5g1sVU2bupKg8RMl74oymit3KZqiiDcR0hlsv2pYiGI=
-github.com/kelindar/binary v1.0.4/go.mod h1:wMMTJccK3HLFh6eH9bD4VRIjUTFVW7pC1q0vTUQ7vV8=
-github.com/kelindar/binary v1.0.7 h1:f3b82x6M4QZ0vJzVHyoUefKEzBTjPFHZ8c7JraeS8bY=
-github.com/kelindar/binary v1.0.7/go.mod h1:wMMTJccK3HLFh6eH9bD4VRIjUTFVW7pC1q0vTUQ7vV8=
+github.com/kelindar/binary v1.0.8-0.20190610075947-baa363638f31 h1:1Xy9XFJV45z2OPtqQCQx51YXPpcxq87+t0ksefu/RsY=
+github.com/kelindar/binary v1.0.8-0.20190610075947-baa363638f31/go.mod h1:wMMTJccK3HLFh6eH9bD4VRIjUTFVW7pC1q0vTUQ7vV8=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/stretchr/testify v1.2.2 h1:bSDNvY7ZPG5RlJ8otE/7V6gMiyenm9RtJ7IUVIAoJ1w=

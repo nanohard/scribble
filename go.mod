@@ -4,5 +4,5 @@ go 1.12
 
 require (
 	github.com/jcelliott/lumber v0.0.0-20160324203708-dd349441af25
-	github.com/kelindar/binary v1.0.7
+	github.com/kelindar/binary v1.0.8-0.20190610075947-baa363638f31
 )
