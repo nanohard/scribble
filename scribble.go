@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"strings"
 	"sync"
 
 	"github.com/jcelliott/lumber"
@@ -193,6 +194,41 @@ func (d *Driver) ReadAll(collection string) ([]string, error) {
 
 		// append read file
 		records = append(records, string(b))
+	}
+
+	// unmarhsal the read files as a comma delimeted byte array
+	return records, nil
+}
+
+// List all records from a collection; this is returned as a slice of strings because
+// there is no way of knowing what type the record is.
+func (d *Driver) List(collection string) ([]string, error) {
+
+	// ensure there is a collection to read
+	if collection == "" {
+		return nil, fmt.Errorf("missing collection - unable to record location")
+	}
+
+	//
+	dir := filepath.Join(d.dir, collection)
+
+	// check to see if collection (directory) exists
+	if _, err := stat(dir); err != nil {
+		return nil, err
+	}
+
+	// read all the files in the transaction.Collection; an error here just means
+	// the collection is either empty or doesn't exist
+	files, _ := ioutil.ReadDir(dir)
+
+	// the IDs of collection
+	var records []string
+
+	for _, file := range files {
+		name := file.Name()
+		if strings.HasSuffix(name, ".json") {
+			records = append(records, name[:len(name)-5])
+		}
 	}
 
 	// unmarhsal the read files as a comma delimeted byte array
