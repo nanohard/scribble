@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"strings"
 	"sync"
 
 	"github.com/jcelliott/lumber"
@@ -213,7 +214,7 @@ func (d *Driver) List(collection string) ([]string, error) {
 
 	// check to see if collection (directory) exists
 	if _, err := stat(dir); err != nil {
-		return nil, nil
+		return nil, err
 	}
 
 	// read all the files in the transaction.Collection; an error here just means
@@ -225,7 +226,9 @@ func (d *Driver) List(collection string) ([]string, error) {
 
 	for _, file := range files {
 		name := file.Name()
-		records = append(records, name[:len(name)-5])
+		if strings.HasSuffix(name, ".json") {
+			records = append(records, name[:len(name)-5])
+		}
 	}
 
 	// unmarhsal the read files as a comma delimeted byte array
